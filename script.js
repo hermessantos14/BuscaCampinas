@@ -1,1 +1,1165 @@
-console.log("Busca Campinas iniciado");
+/* =========================================================
+   BUSCA CAMPINAS
+   v0.2 - Sistema de Navegação
+   ========================================================= */
+
+
+/* =========================================================
+   DADOS FICTÍCIOS
+   ========================================================= */
+
+const ads = [
+
+    /* =========================
+       SERVIÇOS
+       ========================= */
+
+    {
+        id: 1,
+        type: "servicos",
+        title: "Barbearia Premium",
+        category: "Barbearia",
+        description:
+            "Cortes masculinos, barba, acabamento e serviços especializados para quem busca qualidade e atendimento personalizado.",
+        neighborhood: "Cambuí",
+        price: "A partir de R$ 35,00",
+        whatsapp: "19999990001",
+        image: "img/demo1.jpeg"
+    },
+
+    {
+        id: 2,
+        type: "servicos",
+        title: "Eletricista Express",
+        category: "Eletricista",
+        description:
+            "Serviços elétricos residenciais e comerciais, instalações, manutenção e pequenos reparos.",
+        neighborhood: "Taquaral",
+        price: "A consultar",
+        whatsapp: "19999990002",
+        image: "img/demo2.jpg"
+    },
+
+    {
+        id: 3,
+        type: "servicos",
+        title: "Fretes Campinas",
+        category: "Fretes e Mudanças",
+        description:
+            "Fretes pequenos e médios, mudanças residenciais e transporte de móveis em Campinas e região.",
+        neighborhood: "Ouro Verde",
+        price: "A consultar",
+        whatsapp: "19999990003",
+        image: "img/demo3.jpg"
+    },
+
+    {
+        id: 4,
+        type: "servicos",
+        title: "Diarista Juliana",
+        category: "Limpeza",
+        description:
+            "Serviço de limpeza residencial com atendimento cuidadoso e horários previamente agendados.",
+        neighborhood: "Barão Geraldo",
+        price: "A partir de R$ 150,00",
+        whatsapp: "19999990004",
+        image: "img/demo4.jpeg"
+    },
+
+
+    /* =========================
+       PRODUTOS
+       ========================= */
+
+    {
+        id: 5,
+        type: "produtos",
+        title: "Marmitas da Ana",
+        category: "Alimentação",
+        description:
+            "Marmitas caseiras preparadas diariamente, com opções variadas para almoço e jantar.",
+        neighborhood: "Jardim Aurélia",
+        price: "A partir de R$ 18,00",
+        whatsapp: "19999990005",
+        image: "img/demo5.jpg"
+    },
+
+    {
+        id: 6,
+        type: "produtos",
+        title: "Bolos da Vó",
+        category: "Doces e Bolos",
+        description:
+            "Bolos caseiros, bolos para festas e encomendas especiais.",
+        neighborhood: "Cambuí",
+        price: "A partir de R$ 35,00",
+        whatsapp: "19999990006",
+        image: "img/demo6.jpg"
+    },
+
+    {
+        id: 7,
+        type: "produtos",
+        title: "Brechó Elegance",
+        category: "Moda",
+        description:
+            "Roupas selecionadas, peças seminovas e opções de moda feminina.",
+        neighborhood: "Centro",
+        price: "A partir de R$ 20,00",
+        whatsapp: "19999990007",
+        image: "img/demo7.jpg"
+    },
+
+    {
+        id: 8,
+        type: "produtos",
+        title: "Artesanato Campinas",
+        category: "Artesanato",
+        description:
+            "Produtos artesanais e peças decorativas produzidas manualmente.",
+        neighborhood: "Jardim Proença",
+        price: "A consultar",
+        whatsapp: "19999990008",
+        image: "img/demo8.jpeg"
+    },
+
+
+    /* =========================
+       COMÉRCIO LOCAL
+       ========================= */
+
+    {
+        id: 9,
+        type: "comercio",
+        title: "Padaria Pão Quente",
+        category: "Padaria",
+        description:
+            "Pães frescos, cafés, salgados e produtos para o café da manhã e da tarde.",
+        neighborhood: "Cambuí",
+        price: "",
+        whatsapp: "19999990009",
+        image: "img/demo9.jpeg"
+    },
+
+    {
+        id: 10,
+        type: "comercio",
+        title: "Tech Informática",
+        category: "Informática",
+        description:
+            "Assistência técnica, manutenção de computadores e venda de acessórios de informática.",
+        neighborhood: "Centro",
+        price: "",
+        whatsapp: "19999990010",
+        image: "img/demo10.jpeg"
+    },
+
+    {
+        id: 11,
+        type: "comercio",
+        title: "Casa das Ferragens",
+        category: "Ferragens e Construção",
+        description:
+            "Ferramentas, materiais para construção, ferragens e acessórios.",
+        neighborhood: "Jardim Florence",
+        price: "",
+        whatsapp: "19999990011",
+        image: "img/demo11.jpeg"
+    },
+
+    {
+        id: 12,
+        type: "comercio",
+        title: "Hortifruti Primavera",
+        category: "Hortifruti",
+        description:
+            "Frutas, verduras e legumes selecionados para sua casa.",
+        neighborhood: "Taquaral",
+        price: "",
+        whatsapp: "19999990012",
+        image: "img/demo12.jpeg"
+    }
+
+];
+
+
+/* =========================================================
+   CONFIGURAÇÃO DAS CATEGORIAS
+   ========================================================= */
+
+const categories = {
+
+    servicos: {
+        title: "Serviços",
+        subtitle: "Encontre profissionais e serviços em Campinas.",
+        icon: `
+            <svg class="category-icon" viewBox="0 0 24 24">
+                <path d="M14.7 6.3a4.5 4.5 0 0 0-5.9 5.9L3 18l3 3 5.8-5.8a4.5 4.5 0 0 0 5.9-5.9l-2.3 2.3-3-3z"/>
+            </svg>
+        `
+    },
+
+    produtos: {
+        title: "Produtos",
+        subtitle: "Encontre produtos anunciados por vendedores locais.",
+        icon: `
+            <svg class="category-icon" viewBox="0 0 24 24">
+                <path d="M5 8h14l1 13H4L5 8z"/>
+                <path d="M8 8V6a4 4 0 0 1 8 0v2"/>
+            </svg>
+        `
+    },
+
+    comercio: {
+        title: "Comércio Local",
+        subtitle: "Descubra estabelecimentos e negócios próximos.",
+        icon: `
+            <svg class="category-icon" viewBox="0 0 24 24">
+                <path d="M4 10h16"/>
+                <path d="M5 10v10h14V10"/>
+                <path d="M3 10l2-6h14l2 6"/>
+                <path d="M8 20v-6h8v6"/>
+            </svg>
+        `
+    }
+
+};
+
+
+/* =========================================================
+   ESTADO DA APLICAÇÃO
+   ========================================================= */
+
+let currentScreen = "home";
+
+let navigationHistory = [];
+
+let currentCategory = null;
+
+let currentAdId = null;
+
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const appContent =
+    document.getElementById("appContent");
+
+const backButton =
+    document.getElementById("backButton");
+
+
+/* =========================================================
+   FUNÇÃO PRINCIPAL DE NAVEGAÇÃO
+   ========================================================= */
+
+function navigateTo(
+    screen,
+    params = {},
+    addToHistory = true
+) {
+
+    if (
+        addToHistory &&
+        currentScreen !== screen
+    ) {
+
+        navigationHistory.push({
+            screen: currentScreen,
+            category: currentCategory,
+            adId: currentAdId
+        });
+
+    }
+
+    currentScreen = screen;
+
+    currentCategory =
+        params.category !== undefined
+            ? params.category
+            : currentCategory;
+
+    currentAdId =
+        params.adId !== undefined
+            ? params.adId
+            : currentAdId;
+
+    renderScreen();
+
+}
+
+
+/* =========================================================
+   RENDERIZAÇÃO
+   ========================================================= */
+
+function renderScreen() {
+
+    switch (currentScreen) {
+
+        case "home":
+            renderHome();
+            break;
+
+        case "category":
+            renderCategory();
+            break;
+
+        case "detail":
+            renderDetail();
+            break;
+
+        case "search":
+            break;
+
+        default:
+            renderHome();
+
+    }
+
+    updateHeader();
+
+}
+
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+function renderHome() {
+
+    appContent.innerHTML = `
+
+        <img
+            src="img/logo.png"
+            alt="Busca Campinas"
+            class="home-logo">
+
+
+        <form
+            class="search-box"
+            id="searchForm">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="O que você procura?"
+                autocomplete="off">
+
+            <button
+                type="submit"
+                class="search-button"
+                aria-label="Pesquisar">
+
+                <svg viewBox="0 0 24 24">
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7">
+                    </circle>
+
+                    <path
+                        d="M16.5 16.5L21 21">
+                    </path>
+
+                </svg>
+
+            </button>
+
+        </form>
+
+
+        <div class="category-list">
+
+            <button
+                class="category-button"
+                data-category="servicos">
+
+                ${categories.servicos.icon}
+
+                <span>
+                    Serviços
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-button"
+                data-category="produtos">
+
+                ${categories.produtos.icon}
+
+                <span>
+                    Produtos
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-button"
+                data-category="comercio">
+
+                ${categories.comercio.icon}
+
+                <span>
+                    Comércio Local
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div class="home-account-links">
+
+            <button
+                type="button"
+                class="home-link primary"
+                id="announceLink">
+
+                Anuncie Grátis
+
+            </button>
+
+
+            <button
+                type="button"
+                class="home-link"
+                id="loginLink">
+
+                Login
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    /* ---------- CATEGORIAS ---------- */
+
+    document
+        .querySelectorAll(".category-button")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const category =
+                        button.dataset.category;
+
+                    navigateTo(
+                        "category",
+                        {
+                            category: category
+                        }
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* ---------- ANUNCIE GRÁTIS ---------- */
+
+    document
+        .getElementById("announceLink")
+        .addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Cadastro de anunciante será implementado na próxima etapa."
+                );
+
+            }
+        );
+
+
+    /* ---------- LOGIN ---------- */
+
+    document
+        .getElementById("loginLink")
+        .addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Login será implementado na próxima etapa."
+                );
+
+            }
+        );
+
+
+    /* ---------- BUSCA ---------- */
+
+    document
+        .getElementById("searchForm")
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                const term =
+                    document
+                        .getElementById("searchInput")
+                        .value
+                        .trim();
+
+                if (!term) {
+                    return;
+                }
+
+                searchAds(term);
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   CATEGORIA
+   ========================================================= */
+
+function renderCategory() {
+
+    const category =
+        categories[currentCategory];
+
+
+    if (!category) {
+
+        navigateTo(
+            "home",
+            {},
+            false
+        );
+
+        return;
+
+    }
+
+
+    const categoryAds =
+        ads.filter(
+            ad =>
+                ad.type === currentCategory
+        );
+
+
+    appContent.innerHTML = `
+
+        <h1 class="screen-title">
+
+            ${category.title}
+
+        </h1>
+
+
+        <p class="screen-subtitle">
+
+            ${category.subtitle}
+
+        </p>
+
+
+        <div class="ad-list">
+
+            ${categoryAds
+                .map(ad => createAdCard(ad))
+                .join("")}
+
+        </div>
+
+    `;
+
+
+    addAdCardEvents();
+
+}
+
+
+/* =========================================================
+   CARD DE ANÚNCIO
+   ========================================================= */
+
+function createAdCard(ad) {
+
+    const price =
+        ad.price
+            ? `
+                <div class="ad-price">
+                    ${ad.price}
+                </div>
+              `
+            : "";
+
+
+    return `
+
+        <article
+            class="ad-card"
+            data-ad-id="${ad.id}">
+
+            <img
+                src="${ad.image}"
+                alt="${ad.title}"
+                class="ad-image">
+
+
+            <div class="ad-info">
+
+                <div class="ad-category">
+
+                    ${getTypeLabel(ad.type)}
+
+                </div>
+
+
+                <h2 class="ad-title">
+
+                    ${ad.title}
+
+                </h2>
+
+
+                <div class="ad-location">
+
+                    ${ad.neighborhood}
+
+                </div>
+
+
+                ${price}
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   EVENTOS DOS CARDS
+   ========================================================= */
+
+function addAdCardEvents() {
+
+    document
+        .querySelectorAll(".ad-card")
+        .forEach(card => {
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    const id =
+                        Number(
+                            card.dataset.adId
+                        );
+
+                    navigateTo(
+                        "detail",
+                        {
+                            adId: id
+                        }
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   DETALHE
+   ========================================================= */
+
+function renderDetail() {
+
+    const ad =
+        ads.find(
+            item =>
+                item.id === currentAdId
+        );
+
+
+    if (!ad) {
+
+        navigateTo(
+            "home",
+            {},
+            false
+        );
+
+        return;
+
+    }
+
+
+    const priceRow =
+        ad.price
+            ? `
+                <div class="detail-info-row">
+
+                    <span
+                        class="detail-info-label">
+
+                        Preço:
+
+                    </span>
+
+
+                    <span
+                        class="detail-info-value">
+
+                        ${ad.price}
+
+                    </span>
+
+                </div>
+              `
+            : "";
+
+
+    appContent.innerHTML = `
+
+        <img
+            src="${ad.image}"
+            alt="${ad.title}"
+            class="detail-image">
+
+
+        <span class="detail-category">
+
+            ${getTypeLabel(ad.type)}
+
+        </span>
+
+
+        <h1 class="detail-title">
+
+            ${ad.title}
+
+        </h1>
+
+
+        <p class="detail-description">
+
+            ${ad.description}
+
+        </p>
+
+
+        <div class="detail-info-box">
+
+
+            <div class="detail-info-row">
+
+                <span
+                    class="detail-info-label">
+
+                    Categoria:
+
+                </span>
+
+
+                <span
+                    class="detail-info-value">
+
+                    ${ad.category}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-info-row">
+
+                <span
+                    class="detail-info-label">
+
+                    Bairro:
+
+                </span>
+
+
+                <span
+                    class="detail-info-value">
+
+                    ${ad.neighborhood}
+
+                </span>
+
+            </div>
+
+
+            ${priceRow}
+
+        </div>
+
+
+        <button
+            class="whatsapp-button"
+            id="whatsappButton"
+            type="button">
+
+            <span>
+                WhatsApp
+            </span>
+
+        </button>
+
+    `;
+
+
+    document
+        .getElementById("whatsappButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                openWhatsApp(
+                    ad.whatsapp
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   BUSCA
+   ========================================================= */
+
+function searchAds(term) {
+
+    const normalizedTerm =
+        normalizeText(term);
+
+
+    const results =
+        ads.filter(ad => {
+
+            const searchableText = [
+
+                ad.title,
+                ad.description,
+                ad.category,
+                ad.neighborhood,
+                getTypeLabel(ad.type)
+
+            ]
+                .join(" ")
+                .toLowerCase();
+
+
+            return normalizeText(
+                searchableText
+            ).includes(
+                normalizedTerm
+            );
+
+        });
+
+
+    renderSearchResults(
+        term,
+        results
+    );
+
+}
+
+
+/* =========================================================
+   RESULTADOS DA BUSCA
+   ========================================================= */
+
+function renderSearchResults(
+    term,
+    results
+) {
+
+    navigationHistory.push({
+
+        screen: currentScreen,
+
+        category: currentCategory,
+
+        adId: currentAdId
+
+    });
+
+
+    currentScreen = "search";
+
+
+    appContent.innerHTML = `
+
+        <h1 class="screen-title">
+
+            Resultados
+
+        </h1>
+
+
+        <p class="screen-subtitle">
+
+            Busca por:
+            <strong>
+                ${escapeHtml(term)}
+            </strong>
+
+        </p>
+
+
+        ${
+            results.length
+
+                ? `
+
+                    <div class="ad-list">
+
+                        ${results
+                            .map(ad =>
+                                createAdCard(ad)
+                            )
+                            .join("")}
+
+                    </div>
+
+                  `
+
+                : `
+
+                    <div class="empty-state">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="7">
+                            </circle>
+
+                            <path
+                                d="M16.5 16.5L21 21">
+                            </path>
+
+                        </svg>
+
+
+                        <h3>
+
+                            Nenhum anúncio encontrado
+
+                        </h3>
+
+
+                        <p>
+
+                            Tente pesquisar por outro
+                            termo, categoria ou bairro.
+
+                        </p>
+
+                    </div>
+
+                  `
+        }
+
+    `;
+
+
+    addAdCardEvents();
+
+    updateHeader();
+
+}
+
+
+/* =========================================================
+   VOLTAR
+   ========================================================= */
+
+function goBack() {
+
+    if (
+        navigationHistory.length === 0
+    ) {
+
+        navigateTo(
+            "home",
+            {},
+            false
+        );
+
+        return;
+
+    }
+
+
+    const previous =
+        navigationHistory.pop();
+
+
+    currentScreen =
+        previous.screen;
+
+
+    currentCategory =
+        previous.category;
+
+
+    currentAdId =
+        previous.adId;
+
+
+    renderScreen();
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+   ========================================================= */
+
+function updateHeader() {
+
+    const appHeader =
+        document.querySelector(
+            ".app-header"
+        );
+
+
+    if (
+        currentScreen === "home"
+    ) {
+
+        backButton
+            .classList
+            .add("hidden");
+
+        appHeader
+            .classList
+            .add("home-header");
+
+    } else {
+
+        backButton
+            .classList
+            .remove("hidden");
+
+        appHeader
+            .classList
+            .remove("home-header");
+
+    }
+
+}
+
+
+/* =========================================================
+   BOTÃO VOLTAR
+   ========================================================= */
+
+backButton.addEventListener(
+    "click",
+    goBack
+);
+
+
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+
+function openWhatsApp(number) {
+
+    const cleanNumber =
+        number.replace(
+            /\D/g,
+            ""
+        );
+
+
+    window.open(
+        `https://wa.me/55${cleanNumber}`,
+        "_blank"
+    );
+
+}
+
+
+/* =========================================================
+   UTILITÁRIOS
+   ========================================================= */
+
+function getTypeLabel(type) {
+
+    const labels = {
+
+        servicos: "Serviço",
+
+        produtos: "Produto",
+
+        comercio: "Comércio Local"
+
+    };
+
+
+    return (
+        labels[type] ||
+        type
+    );
+
+}
+
+
+function normalizeText(text) {
+
+    return text
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .toLowerCase();
+
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent = text;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+renderScreen();
