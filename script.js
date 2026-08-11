@@ -18,7 +18,8 @@ const ads = [
         id: 1,
         type: "servicos",
         title: "Barbearia Premium",
-        category: "Barbearia",
+        category: "Beleza e Cuidados Pessoais",
+        subcategory: "Barbearia",
         description:
             "Cortes masculinos, barba, acabamento e serviços especializados para quem busca qualidade e atendimento personalizado.",
         neighborhood: "Cambuí",
@@ -31,7 +32,8 @@ const ads = [
         id: 2,
         type: "servicos",
         title: "Eletricista Express",
-        category: "Eletricista",
+        category: "Serviços Técnicos e Manutenção",
+        subcategory: "Eletricista",
         description:
             "Serviços elétricos residenciais e comerciais, instalações, manutenção e pequenos reparos.",
         neighborhood: "Taquaral",
@@ -44,7 +46,8 @@ const ads = [
         id: 3,
         type: "servicos",
         title: "Fretes Campinas",
-        category: "Fretes e Mudanças",
+        category: "Serviços de Transporte e Fretes",
+        subcategory: "Fretes e Mudanças",
         description:
             "Fretes pequenos e médios, mudanças residenciais e transporte de móveis em Campinas e região.",
         neighborhood: "Ouro Verde",
@@ -57,7 +60,8 @@ const ads = [
         id: 4,
         type: "servicos",
         title: "Diarista Juliana",
-        category: "Limpeza",
+        category: "Serviços Domésticos",
+        subcategory: "Diarista",
         description:
             "Serviço de limpeza residencial com atendimento cuidadoso e horários previamente agendados.",
         neighborhood: "Barão Geraldo",
@@ -75,7 +79,8 @@ const ads = [
         id: 5,
         type: "produtos",
         title: "Marmitas da Ana",
-        category: "Alimentação",
+        category: "Alimentos",
+        subcategory: "Marmitas",
         description:
             "Marmitas caseiras preparadas diariamente, com opções variadas para almoço e jantar.",
         neighborhood: "Jardim Aurélia",
@@ -88,7 +93,8 @@ const ads = [
         id: 6,
         type: "produtos",
         title: "Bolos da Vó",
-        category: "Doces e Bolos",
+        category: "Alimentos",
+        subcategory: "Bolos e Doces",
         description:
             "Bolos caseiros, bolos para festas e encomendas especiais.",
         neighborhood: "Cambuí",
@@ -101,7 +107,8 @@ const ads = [
         id: 7,
         type: "produtos",
         title: "Brechó Elegance",
-        category: "Moda",
+        category: "Vendas de Segunda Mão",
+        subcategory: "Brechós e Roupas de Segunda Mão",
         description:
             "Roupas selecionadas, peças seminovas e opções de moda feminina.",
         neighborhood: "Centro",
@@ -115,6 +122,7 @@ const ads = [
         type: "produtos",
         title: "Artesanato Campinas",
         category: "Artesanato",
+        subcategory: "Decoração Artesanal",
         description:
             "Produtos artesanais e peças decorativas produzidas manualmente.",
         neighborhood: "Jardim Proença",
@@ -132,7 +140,8 @@ const ads = [
         id: 9,
         type: "comercio",
         title: "Padaria Pão Quente",
-        category: "Padaria",
+        category: "Comércio de Alimentos",
+        subcategory: "Padarias",
         description:
             "Pães frescos, cafés, salgados e produtos para o café da manhã e da tarde.",
         neighborhood: "Cambuí",
@@ -145,7 +154,8 @@ const ads = [
         id: 10,
         type: "comercio",
         title: "Tech Informática",
-        category: "Informática",
+        category: "Comércio de Tecnologia e Eletrônicos",
+        subcategory: "Lojas de Informática",
         description:
             "Assistência técnica, manutenção de computadores e venda de acessórios de informática.",
         neighborhood: "Centro",
@@ -158,7 +168,8 @@ const ads = [
         id: 11,
         type: "comercio",
         title: "Casa das Ferragens",
-        category: "Ferragens e Construção",
+        category: "Comércio para Casa e Construção",
+        subcategory: "Lojas de Materiais de Construção",
         description:
             "Ferramentas, materiais para construção, ferragens e acessórios.",
         neighborhood: "Jardim Florence",
@@ -171,7 +182,8 @@ const ads = [
         id: 12,
         type: "comercio",
         title: "Hortifruti Primavera",
-        category: "Hortifruti",
+        category: "Comércio de Alimentos",
+        subcategory: "Hortifrutis e Quitandas",
         description:
             "Frutas, verduras e legumes selecionados para sua casa.",
         neighborhood: "Taquaral",
