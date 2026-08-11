@@ -450,6 +450,28 @@ body {
     line-height: 1.5;
 }
 
+.empty-state-button {
+    margin-top: 20px;
+    min-height: 46px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 12px;
+    background: var(--red);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+.empty-state-button:hover {
+    background: var(--red-dark);
+
+    transform: translateY(-1px);
+}
+
 /* ---------- UTILITÁRIOS ---------- */
 
 .hidden {

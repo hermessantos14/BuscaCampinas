@@ -860,34 +860,39 @@ function renderDetail() {
 
 function searchAds(term) {
 
-    const normalizedTerm =
-        normalizeText(term);
+    const normalizedTerm = normalizeText(term).trim();
 
+    if (!normalizedTerm) {
+        return;
+    }
+
+    const searchTerms =
+        normalizedTerm
+            .split(/\s+/)
+            .filter(Boolean);
 
     const results =
         ads.filter(ad => {
 
             const searchableText = [
-
                 ad.title,
                 ad.description,
                 ad.category,
+                ad.subcategory,
                 ad.neighborhood,
                 getTypeLabel(ad.type)
-
             ]
-                .join(" ")
-                .toLowerCase();
+                .filter(Boolean)
+                .join(" ");
 
+            const normalizedText =
+                normalizeText(searchableText);
 
-            return normalizeText(
-                searchableText
-            ).includes(
-                normalizedTerm
+            return searchTerms.every(searchTerm =>
+                normalizedText.includes(searchTerm)
             );
 
         });
-
 
     renderSearchResults(
         term,
@@ -895,7 +900,6 @@ function searchAds(term) {
     );
 
 }
-
 
 /* =========================================================
    RESULTADOS DA BUSCA
@@ -984,10 +988,14 @@ function renderSearchResults(
 
                         <p>
 
-                            Tente pesquisar por outro
-                            termo, categoria ou bairro.
-
+                            Tente pesquisar por outro termo.
                         </p>
+                        <button
+                            type="button"
+                            class="empty-state-button"
+                            id="emptyStateHomeButton">
+                            Voltar para o início
+                            </button>
 
                     </div>
 
@@ -998,6 +1006,19 @@ function renderSearchResults(
 
 
     addAdCardEvents();
+    const emptyStateHomeButton =
+    document.getElementById("emptyStateHomeButton");
+
+if (emptyStateHomeButton) {
+
+    emptyStateHomeButton.addEventListener(
+        "click",
+        () => {
+            navigateTo("home");
+        }
+    );
+
+}
 
     updateHeader();
 
