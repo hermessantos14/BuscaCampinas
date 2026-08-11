@@ -325,6 +325,10 @@ function renderScreen() {
         case "search":
             break;
 
+        case "register":
+            renderRegister();
+            break;
+
         default:
             renderHome();
 
@@ -481,17 +485,15 @@ function renderHome() {
     /* ---------- ANUNCIE GRÁTIS ---------- */
 
     document
-        .getElementById("announceLink")
-        .addEventListener(
-            "click",
-            () => {
+    .getElementById("announceLink")
+    .addEventListener(
+        "click",
+        () => {
 
-                alert(
-                    "Cadastro de anunciante será implementado na próxima etapa."
-                );
+            navigateTo("register");
 
-            }
-        );
+        }
+    );
 
 
     /* ---------- LOGIN ---------- */
@@ -537,6 +539,319 @@ function renderHome() {
 
 }
 
+/* =========================================================
+   USUÁRIOS
+   ========================================================= */
+
+function getUsers() {
+
+    const users =
+        localStorage.getItem("buscaCampinasUsers");
+
+    return users
+        ? JSON.parse(users)
+        : [];
+
+}
+
+
+function saveUsers(users) {
+
+    localStorage.setItem(
+        "buscaCampinasUsers",
+        JSON.stringify(users)
+    );
+
+}
+
+
+function setCurrentUser(user) {
+
+    localStorage.setItem(
+        "buscaCampinasCurrentUser",
+        JSON.stringify(user)
+    );
+
+}
+
+
+function getCurrentUser() {
+
+    const user =
+        localStorage.getItem("buscaCampinasCurrentUser");
+
+    return user
+        ? JSON.parse(user)
+        : null;
+
+}
+
+/* =========================================================
+   CADASTRO
+   ========================================================= */
+
+function renderRegister() {
+
+    appContent.innerHTML = `
+
+        <div class="auth-container">
+
+            <h1 class="screen-title">
+                Criar conta
+            </h1>
+
+            <p class="screen-subtitle">
+                Crie sua conta para anunciar gratuitamente no Busca Campinas.
+            </p>
+
+            <form
+                class="auth-form"
+                id="registerForm">
+
+                <div class="form-group">
+
+                    <label for="registerName">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registerName"
+                        name="name"
+                        placeholder="Digite seu nome"
+                        autocomplete="name"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="registerEmail">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="registerPassword">
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        name="password"
+                        placeholder="Digite sua senha"
+                        autocomplete="new-password"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="registerPasswordConfirm">
+                        Confirmar senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPasswordConfirm"
+                        name="passwordConfirm"
+                        placeholder="Digite a senha novamente"
+                        autocomplete="new-password"
+                        required>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="auth-button">
+
+                    Criar conta
+
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+
+                <span>
+                    Já possui uma conta?
+                </span>
+
+                <button
+                    type="button"
+                    class="auth-link"
+                    id="goToLoginButton">
+
+                    Fazer login
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document
+    .getElementById("registerForm")
+    .addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("registerName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("registerEmail")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+
+            const password =
+                document
+                    .getElementById("registerPassword")
+                    .value;
+
+
+            const passwordConfirm =
+                document
+                    .getElementById("registerPasswordConfirm")
+                    .value;
+
+
+            /* ---------- VALIDAÇÕES ---------- */
+
+            if (!name || !email || !password || !passwordConfirm) {
+
+                alert(
+                    "Preencha todos os campos."
+                );
+
+                return;
+
+            }
+
+
+            if (!email.includes("@")) {
+
+                alert(
+                    "Digite um e-mail válido."
+                );
+
+                return;
+
+            }
+
+
+            if (password !== passwordConfirm) {
+
+                alert(
+                    "As senhas não coincidem."
+                );
+
+                return;
+
+            }
+
+
+            /* ---------- VERIFICA E-MAIL ---------- */
+
+            const users = getUsers();
+
+
+            const emailAlreadyExists =
+                users.some(
+                    user =>
+                        user.email === email
+                );
+
+
+            if (emailAlreadyExists) {
+
+                alert(
+                    "Este e-mail já está cadastrado."
+                );
+
+                return;
+
+            }
+
+
+            /* ---------- CRIA USUÁRIO ---------- */
+
+            const newUser = {
+
+                id: Date.now(),
+
+                name: name,
+
+                email: email,
+
+                password: password
+
+            };
+
+
+            users.push(newUser);
+
+            saveUsers(users);
+
+
+            /* ---------- MANTÉM USUÁRIO LOGADO ---------- */
+
+            setCurrentUser({
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email
+            });
+
+
+            alert(
+                "Conta criada com sucesso!"
+            );
+
+
+            navigateTo("home");
+
+        }
+    );
+
+
+    document
+        .getElementById("goToLoginButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Login será implementado na próxima etapa."
+                );
+
+            }
+        );
+
+}
 
 /* =========================================================
    CATEGORIA
