@@ -449,9 +449,13 @@ function renderHome() {
             <button
                 type="button"
                 class="home-link"
-                id="loginLink">
+                id="accountActionLink">
 
-                Login
+                ${
+                    getCurrentUser()
+                    ? "Sair"
+                    : "Login"
+                }
 
             </button>
 
@@ -503,10 +507,23 @@ function renderHome() {
     /* ---------- LOGIN ---------- */
 
     document
-    .getElementById("loginLink")
-    .addEventListener(
-        "click",
+        .getElementById("accountActionLink")
+        .addEventListener(
+            "click",
         () => {
+
+            const currentUser =
+                getCurrentUser();
+
+
+            if (currentUser) {
+
+                logout();
+
+                return;
+
+            }
+
 
             navigateTo("login");
 
@@ -585,6 +602,21 @@ function getCurrentUser() {
     return user
         ? JSON.parse(user)
         : null;
+
+}
+
+function logout() {
+
+    localStorage.removeItem(
+        "buscaCampinasCurrentUser"
+    );
+
+
+    navigateTo(
+        "home",
+        {},
+        false
+    );
 
 }
 
