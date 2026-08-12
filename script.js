@@ -841,17 +841,15 @@ function renderRegister() {
 
 
     document
-        .getElementById("goToLoginButton")
-        .addEventListener(
-            "click",
-            () => {
+    .getElementById("goToLoginButton")
+    .addEventListener(
+        "click",
+        () => {
 
-                alert(
-                    "Login será implementado na próxima etapa."
-                );
+            navigateTo("login");
 
-            }
-        );
+        }
+    );
 
 }
 
@@ -942,19 +940,99 @@ function renderLogin() {
 
 
     document
-        .getElementById("loginForm")
-        .addEventListener(
-            "submit",
-            event => {
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        event => {
 
-                event.preventDefault();
+            event.preventDefault();
+
+
+            const email =
+                document
+                    .getElementById("loginEmail")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+
+            const password =
+                document
+                    .getElementById("loginPassword")
+                    .value;
+
+
+            /* ---------- VALIDAÇÃO ---------- */
+
+            if (!email || !password) {
 
                 alert(
-                    "Login será implementado na próxima etapa."
+                    "Preencha o e-mail e a senha."
                 );
 
+                return;
+
             }
-        );
+
+
+            /* ---------- BUSCA USUÁRIO ---------- */
+
+            const users = getUsers();
+
+
+            const user =
+                users.find(
+                    item =>
+                        item.email === email
+                );
+
+
+            if (!user) {
+
+                alert(
+                    "E-mail ou senha incorretos."
+                );
+
+                return;
+
+            }
+
+
+            /* ---------- VERIFICA SENHA ---------- */
+
+            if (user.password !== password) {
+
+                alert(
+                    "E-mail ou senha incorretos."
+                );
+
+                return;
+
+            }
+
+
+            /* ---------- CRIA SESSÃO ---------- */
+
+            setCurrentUser({
+
+                id: user.id,
+
+                name: user.name,
+
+                email: user.email
+
+            });
+
+
+            alert(
+                "Login realizado com sucesso!"
+            );
+
+
+            navigateTo("home");
+
+        }
+    );
 
 
     document
