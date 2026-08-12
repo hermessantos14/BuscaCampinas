@@ -333,6 +333,10 @@ function renderScreen() {
             renderLogin();
             break;
 
+        case "account":
+            renderAccount();
+            break;
+
         default:
             renderHome();
 
@@ -493,10 +497,23 @@ function renderHome() {
     /* ---------- ANUNCIE GRÁTIS ---------- */
 
     document
-    .getElementById("announceLink")
-    .addEventListener(
-        "click",
-        () => {
+        .getElementById("announceLink")
+        .addEventListener(
+            "click",
+            () => {
+
+                const currentUser =
+                    getCurrentUser();
+
+
+                if (currentUser) {
+
+                    navigateTo("account");
+
+                    return;
+
+                }
+
 
             navigateTo("register");
 
@@ -1079,6 +1096,132 @@ function renderLogin() {
         );
 
 }
+
+/* =========================================================
+   MINHA CONTA
+   ========================================================= */
+
+function renderAccount() {
+
+    const currentUser =
+        getCurrentUser();
+
+
+    if (!currentUser) {
+
+        navigateTo(
+            "login",
+            {},
+            false
+        );
+
+        return;
+
+    }
+
+
+    appContent.innerHTML = `
+
+        <div class="auth-container">
+
+            <h1 class="screen-title">
+                Minha conta
+            </h1>
+
+            <p class="screen-subtitle">
+                Gerencie sua conta e seus anúncios.
+            </p>
+
+
+            <div class="detail-info-box">
+
+                <div class="detail-info-row">
+
+                    <span class="detail-info-label">
+                        Nome:
+                    </span>
+
+                    <span class="detail-info-value">
+                        ${escapeHtml(currentUser.name)}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-info-row">
+
+                    <span class="detail-info-label">
+                        E-mail:
+                    </span>
+
+                    <span class="detail-info-value">
+                        ${escapeHtml(currentUser.email)}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="auth-button"
+                id="createAdButton">
+
+                Anunciar grátis
+
+            </button>
+
+
+            <div class="auth-footer">
+
+                <button
+                    type="button"
+                    class="auth-link"
+                    id="logoutButton">
+
+                    Sair da conta
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* ---------- ANUNCIAR GRÁTIS ---------- */
+
+    document
+        .getElementById("createAdButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                alert(
+                    "Cadastro de anúncio será implementado na próxima etapa."
+                );
+
+            }
+        );
+
+
+    /* ---------- LOGOUT ---------- */
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                logout();
+
+            }
+        );
+
+}
+
 
 /* =========================================================
    CATEGORIA
