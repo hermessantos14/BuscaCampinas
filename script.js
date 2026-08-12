@@ -329,6 +329,10 @@ function renderScreen() {
             renderRegister();
             break;
 
+        case "login":
+            renderLogin();
+            break;
+
         default:
             renderHome();
 
@@ -499,17 +503,15 @@ function renderHome() {
     /* ---------- LOGIN ---------- */
 
     document
-        .getElementById("loginLink")
-        .addEventListener(
-            "click",
-            () => {
+    .getElementById("loginLink")
+    .addEventListener(
+        "click",
+        () => {
 
-                alert(
-                    "Login será implementado na próxima etapa."
-                );
+            navigateTo("login");
 
-            }
-        );
+        }
+    );
 
 
     /* ---------- BUSCA ---------- */
@@ -847,6 +849,121 @@ function renderRegister() {
                 alert(
                     "Login será implementado na próxima etapa."
                 );
+
+            }
+        );
+
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+function renderLogin() {
+
+    appContent.innerHTML = `
+
+        <div class="auth-container">
+
+            <h1 class="screen-title">
+                Entrar
+            </h1>
+
+            <p class="screen-subtitle">
+                Acesse sua conta para gerenciar seus anúncios.
+            </p>
+
+            <form
+                class="auth-form"
+                id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="loginEmail">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="loginPassword">
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="auth-button">
+
+                    Entrar
+
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+
+                <span>
+                    Ainda não possui uma conta?
+                </span>
+
+                <button
+                    type="button"
+                    class="auth-link"
+                    id="goToRegisterButton">
+
+                    Criar conta
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("loginForm")
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                alert(
+                    "Login será implementado na próxima etapa."
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("goToRegisterButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                navigateTo("register");
 
             }
         );
