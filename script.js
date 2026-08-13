@@ -237,6 +237,124 @@ const categories = {
 
 };
 
+/* =========================================================
+   CATEGORIAS DE ANÚNCIOS
+   ========================================================= */
+
+const adCategories = {
+
+    servicos: {
+
+        "Beleza e Cuidados Pessoais": [
+            "Salão de Beleza",
+            "Barbearia"
+        ],
+
+        "Serviços Técnicos e Manutenção": [
+            "Eletricista",
+            "Pedreiro",
+            "Pintor",
+            "Montador de Móveis",
+            "Chaveiro",
+            "Costureira",
+            "Manutenção de Ar-Condicionado",
+            "Manutenção de Veículos"
+        ],
+
+        "Transporte e Fretes": [
+            "Fretes e Mudanças",
+            "Motoboy"
+        ],
+
+        "Serviços Domésticos": [
+            "Diarista",
+            "Desentupidora",
+            "Limpeza de Tapetes e Estofados"
+        ],
+
+        "Eventos": [
+            "Locações para Festas"
+        ],
+
+        "Empresas": [
+            "Contabilidade"
+        ],
+
+        "Educacionais": [
+            "Aulas Particulares"
+        ]
+
+    },
+
+    produtos: {
+
+    "Alimentos": [
+        "Marmitas",
+        "Lanches e Salgados",
+        "Bolos e Doces",
+        "Alimentos Orgânicos"
+    ],
+
+    "Artesanato": [
+        "Roupas Personalizadas",
+        "Decoração Artesanal",
+        "Bijuterias",
+        "Cosméticos Artesanais",
+        "Cestas Personalizadas"
+    ],
+
+    "Segunda Mão": [
+        "Brechó",
+        "Móveis Usados",
+        "Livros Usados"
+    ],
+
+    "Moda": [
+        "Roupas",
+        "Calçados",
+        "Acessórios"
+    ]
+
+    },
+
+    comercio: {
+
+        "Comércio de Alimentos": [
+            "Restaurantes e Bares",
+            "Lanchonetes",
+            "Padarias",
+            "Mercearias e Supermercados Locais",
+            "Empórios",
+            "Hortifrutis e Quitandas"
+        ],
+
+        "Comércio de Roupas e Acessórios": [
+            "Lojas de Roupas",
+            "Loja de Calçados e Bolsas",
+            "Loja de Bijuteria e Acessórios"
+        ],
+
+        "Comércio de Móveis e Decoração": [
+            "Lojas de Móveis",
+            "Móveis Planejados",
+            "Loja de Decoração"
+        ],
+
+        "Comércio de Tecnologia e Eletrônicos": [
+            "Lojas de Informática",
+            "Lojas de Celulares e Acessórios",
+            "Loja de Eletrodomésticos"
+        ],
+
+        "Comércio para Casa e Construção": [
+            "Lojas de Materiais de Construção",
+            "Lojas de Produtos de Jardinagem",
+            "Lojas de Utensílios Domésticos"
+        ]
+
+    }
+
+};
 
 /* =========================================================
    ESTADO DA APLICAÇÃO
@@ -335,6 +453,10 @@ function renderScreen() {
 
         case "account":
             renderAccount();
+            break;
+
+        case "createAd":
+            renderCreateAd();
             break;
 
         default:
@@ -1199,9 +1321,7 @@ function renderAccount() {
             "click",
             () => {
 
-                alert(
-                    "Cadastro de anúncio será implementado na próxima etapa."
-                );
+                navigateTo("createAd");
 
             }
         );
@@ -1216,6 +1336,344 @@ function renderAccount() {
             () => {
 
                 logout();
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   CADASTRO DE ANÚNCIO
+   ========================================================= */
+
+function renderCreateAd() {
+
+    const currentUser =
+        getCurrentUser();
+
+
+    if (!currentUser) {
+
+        navigateTo(
+            "login",
+            {},
+            false
+        );
+
+        return;
+
+    }
+
+
+    appContent.innerHTML = `
+
+        <div class="auth-container">
+
+            <h1 class="screen-title">
+                Criar anúncio
+            </h1>
+
+            <p class="screen-subtitle">
+                Preencha as informações do seu anúncio.
+            </p>
+
+
+            <form
+                class="auth-form"
+                id="createAdForm">
+
+
+                <div class="form-group">
+
+                    <label for="adType">
+                        Tipo de anúncio
+                    </label>
+
+                    <select
+                        id="adType"
+                        name="type"
+                        required>
+
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="servicos">
+                            Serviço
+                        </option>
+
+                        <option value="produtos">
+                            Produto
+                        </option>
+
+                        <option value="comercio">
+                            Comércio Local
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adTitle">
+                        Título
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adTitle"
+                        name="title"
+                        placeholder="Ex.: Eletricista residencial"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adCategory">
+                        Categoria
+                    </label>
+
+                    <select
+                        id="adCategory"
+                        name="category"
+                        required>
+
+                        <option value="">
+                            Selecione uma categoria
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adSubcategory">
+                        Subcategoria
+                    </label>
+
+                    <select
+                        id="adSubcategory"
+                        name="subcategory"
+                        required
+                        disabled>
+
+                        <option value="">
+                            Selecione primeiro uma categoria
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adDescription">
+                        Descrição
+                    </label>
+
+                    <textarea
+                        id="adDescription"
+                        name="description"
+                        placeholder="Descreva seu produto ou serviço"
+                        required></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adNeighborhood">
+                        Bairro
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adNeighborhood"
+                        name="neighborhood"
+                        placeholder="Ex.: Cambuí"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adPrice">
+                        Preço
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adPrice"
+                        name="price"
+                        placeholder="Ex.: A partir de R$ 50,00">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adWhatsapp">
+                        WhatsApp
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="adWhatsapp"
+                        name="whatsapp"
+                        placeholder="Ex.: (19) 99999-0000"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adImage">
+                        Imagem
+                    </label>
+
+                    <input
+                        type="file"
+                        id="adImage"
+                        name="image"
+                        accept="image/*">
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-button">
+
+                    Publicar anúncio
+
+                </button>
+
+            </form>
+
+        </div>
+
+    `;
+
+    const adType =
+    document.getElementById("adType");
+
+    const adCategory =
+    document.getElementById("adCategory");
+
+    const adSubcategory =
+    document.getElementById("adSubcategory"); 
+    
+    
+
+    adType.addEventListener(
+    "change",
+    () => {
+
+        const categoriesForType =
+            adCategories[adType.value] || {};
+
+
+        adCategory.innerHTML = `
+            <option value="">
+                Selecione uma categoria
+            </option>
+        `;
+
+
+        Object.keys(categoriesForType)
+            .forEach(category => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = category;
+
+                option.textContent = category;
+
+                adCategory.appendChild(option);
+
+            });
+
+
+        adSubcategory.innerHTML = `
+            <option value="">
+                Selecione primeiro uma categoria
+            </option>
+        `;
+
+        adSubcategory.disabled = true;
+
+    }
+    );
+
+    adCategory.addEventListener(
+    "change",
+    () => {
+
+        const categoriesForType =
+            adCategories[adType.value] || {};
+
+
+        const subcategories =
+            categoriesForType[
+                adCategory.value
+            ] || [];
+
+
+        adSubcategory.innerHTML = `
+            <option value="">
+                Selecione uma subcategoria
+            </option>
+        `;
+
+
+        subcategories.forEach(
+            subcategory => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    subcategory;
+
+                option.textContent =
+                    subcategory;
+
+                adSubcategory.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        adSubcategory.disabled =
+            subcategories.length === 0;
+
+    }
+    );
+
+    document
+        .getElementById("createAdForm")
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                alert(
+                    "Publicação de anúncio será implementada na próxima etapa."
+                );
 
             }
         );
