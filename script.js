@@ -1426,7 +1426,7 @@ function renderCreateAd() {
                         type="text"
                         id="adTitle"
                         name="title"
-                        placeholder="Ex.: Eletricista residencial"
+                        placeholder="Ex.: Eletricista residencial em Campinas"
                         required>
 
                 </div>
@@ -1482,7 +1482,7 @@ function renderCreateAd() {
                     <textarea
                         id="adDescription"
                         name="description"
-                        placeholder="Descreva seu produto ou serviço"
+                        placeholder="Descreva seu produto, serviço ou comércio"
                         required></textarea>
 
                 </div>
@@ -1498,7 +1498,7 @@ function renderCreateAd() {
                         type="text"
                         id="adNeighborhood"
                         name="neighborhood"
-                        placeholder="Ex.: Cambuí"
+                        placeholder="Ex.: Cambuí, Centro ou Taquaral"
                         required>
 
                 </div>
@@ -1514,7 +1514,7 @@ function renderCreateAd() {
                         type="text"
                         id="adPrice"
                         name="price"
-                        placeholder="Ex.: A partir de R$ 50,00">
+                        placeholder="Ex.: R$ 50,00 ou sob consulta">
 
                 </div>
 
@@ -1671,12 +1671,79 @@ function renderCreateAd() {
 
                 event.preventDefault();
 
+
+                const imageFile =
+                    document.getElementById("adImage")
+                        .files[0];
+
+
+                const newAd = {
+
+                    id:
+                        Math.max(
+                            ...ads.map(
+                                ad => ad.id
+                            )
+                        ) + 1,
+
+                    type:
+                        adType.value,
+
+                    title:
+                        document
+                            .getElementById("adTitle")
+                            .value
+                            .trim(),
+
+                    category:
+                        adCategory.value,
+
+                    subcategory:
+                        adSubcategory.value,
+
+                    description:
+                        document
+                            .getElementById("adDescription")
+                            .value
+                            .trim(),
+
+                    neighborhood:
+                        document
+                            .getElementById("adNeighborhood")
+                            .value
+                            .trim(),
+
+                    price:
+                        document
+                            .getElementById("adPrice")
+                            .value
+                            .trim(),
+
+                    whatsapp:
+                        document
+                            .getElementById("adWhatsapp")
+                            .value
+                            .trim(),
+
+                    image:
+                        imageFile
+                            ? URL.createObjectURL(
+                                imageFile
+                            )
+                            : ""
+
+                };
+
+
+                ads.push(newAd);
+
+
                 alert(
-                    "Publicação de anúncio será implementada na próxima etapa."
+                    "Anúncio criado com sucesso!"
                 );
 
             }
-        );
+    );
 
 }
 
