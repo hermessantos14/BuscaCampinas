@@ -46,7 +46,7 @@ const ads = [
         id: 3,
         type: "servicos",
         title: "Fretes Campinas",
-        category: "Serviços de Transporte e Fretes",
+        category: "Transporte e Fretes",
         subcategory: "Fretes e Mudanças",
         description:
             "Fretes pequenos e médios, mudanças residenciais e transporte de móveis em Campinas e região.",
@@ -107,8 +107,8 @@ const ads = [
         id: 7,
         type: "produtos",
         title: "Brechó Elegance",
-        category: "Vendas de Segunda Mão",
-        subcategory: "Brechós e Roupas de Segunda Mão",
+        category: "Segunda Mão",
+        subcategory: "Brechó",
         description:
             "Roupas selecionadas, peças seminovas e opções de moda feminina.",
         neighborhood: "Centro",
