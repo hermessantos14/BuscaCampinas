@@ -194,6 +194,56 @@ const ads = [
 
 ];
 
+/* =========================================================
+   PERSISTÊNCIA DOS ANÚNCIOS
+   ========================================================= */
+
+function saveAds() {
+    localStorage.setItem(
+        "buscaCampinasAds",
+        JSON.stringify(ads)
+    );
+}
+
+function loadAds() {
+    const savedAds =
+        localStorage.getItem(
+            "buscaCampinasAds"
+        );
+    if (!savedAds) {
+        return;
+    }
+    const parsedAds =
+        JSON.parse(savedAds);
+    ads.length = 0;
+    ads.push(
+        ...parsedAds
+    );
+}
+
+function fileToDataUrl(file) {
+    return new Promise(
+        (resolve, reject) => {
+            const reader =
+                new FileReader();
+            reader.onload =
+                () => {
+                    resolve(
+                        reader.result
+                    );
+                };
+            reader.onerror =
+                () => {
+                    reject(
+                        reader.error
+                    );
+                };
+            reader.readAsDataURL(
+                file
+            );
+        }
+    );
+}
 
 /* =========================================================
    CONFIGURAÇÃO DAS CATEGORIAS
@@ -1351,8 +1401,6 @@ function renderCreateAd() {
 
     const currentUser =
         getCurrentUser();
-
-
     if (!currentUser) {
 
         navigateTo(
@@ -1360,9 +1408,7 @@ function renderCreateAd() {
             {},
             false
         );
-
         return;
-
     }
 
 
@@ -1573,7 +1619,6 @@ function renderCreateAd() {
     const adSubcategory =
     document.getElementById("adSubcategory"); 
     
-    
 
     adType.addEventListener(
     "change",
@@ -1667,15 +1712,22 @@ function renderCreateAd() {
         .getElementById("createAdForm")
         .addEventListener(
             "submit",
-            event => {
+            async event => {
 
                 event.preventDefault();
-
 
                 const imageFile =
                     document.getElementById("adImage")
                         .files[0];
 
+                        let imageData = "";
+
+                        if (imageFile) {
+                            imageData =
+                                await fileToDataUrl(
+                                    imageFile
+                                );
+                        }
 
                 const newAd = {
 
@@ -1726,18 +1778,14 @@ function renderCreateAd() {
                             .trim(),
 
                     image:
-                        imageFile
-                            ? URL.createObjectURL(
-                                imageFile
-                            )
-                            : ""
+                        imageData
 
                 };
 
 
                 ads.push(newAd);
 
-
+                saveAds();
                 alert(
                     "Anúncio criado com sucesso!"
                 );
@@ -2404,5 +2452,5 @@ function escapeHtml(text) {
 /* =========================================================
    INICIALIZAÇÃO
    ========================================================= */
-
+loadAds();
 renderScreen();
