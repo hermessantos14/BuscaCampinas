@@ -1333,7 +1333,19 @@ function renderAccount() {
                 </div>
 
             </div>
+            <div class="detail-info-box">
 
+                <h2>
+                    Meus anúncios
+                </h2>
+
+                <div id="myAdsList">
+
+                    Nenhum anúncio publicado.
+
+                </div>
+
+            </div>
 
             <button
                 type="button"
@@ -1362,6 +1374,89 @@ function renderAccount() {
 
     `;
 
+    const myAds =
+    getUserAds(
+        currentUser.id
+    );
+
+
+const myAdsList =
+    document.getElementById(
+        "myAdsList"
+    );
+
+
+if (myAds.length > 0) {
+
+    myAdsList.innerHTML =
+        `<div class="ad-list">
+            ${myAds
+                .map(
+                    ad => `
+                        <div class="my-ad-item">
+
+                            ${createAdCard(ad)}
+
+                            <button
+                                type="button"
+                                class="edit-ad-button"
+                                data-ad-id="${ad.id}">
+                                Editar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-ad-button"
+                                data-ad-id="${ad.id}">
+                                Excluir
+                            </button>
+
+                        </div>
+                    `
+                )
+                .join("")}
+        </div>`;
+
+    addAdCardEvents();
+
+    document
+    .querySelectorAll(".delete-ad-button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                const adId =
+                    Number(
+                        button.dataset.adId
+                    );
+
+                deleteUserAd(adId);
+
+            }
+        );
+
+    });
+
+    document
+    .querySelectorAll(".edit-ad-button")
+    .forEach(button => {
+        button.addEventListener(
+            "click",
+            event => {
+                event.stopPropagation();
+                const adId =
+                    Number(
+                        button.dataset.adId
+                    );
+                renderCreateAd(adId);
+            }
+        );
+    });
+}
 
     /* ---------- ANUNCIAR GRÁTIS ---------- */
 
@@ -1394,10 +1489,76 @@ function renderAccount() {
 
 
 /* =========================================================
+   ANÚNCIOS DO USUÁRIO
+   ========================================================= */
+
+function getUserAds(userId) {
+
+    return ads.filter(
+        ad =>
+            ad.userId === userId
+    );
+
+}
+
+function deleteUserAd(adId) {
+    const currentUser =
+        getCurrentUser();
+
+    if (!currentUser) {
+        return;
+    }
+
+    const ad =
+        ads.find(
+            item =>
+                item.id === adId
+        );
+
+    if (!ad) {
+        return;
+    }
+
+    if (
+        ad.userId !==
+        currentUser.id
+    ) {
+
+        alert(
+            "Você não pode excluir este anúncio."
+        );
+        return;
+    }
+
+    const confirmed =
+        confirm(
+            "Tem certeza que deseja excluir este anúncio?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const adIndex =
+        ads.findIndex(
+            item =>
+                item.id === adId
+        );
+
+    ads.splice(
+        adIndex,
+        1
+    );
+
+    saveAds();
+    renderAccount();
+}
+
+/* =========================================================
    CADASTRO DE ANÚNCIO
    ========================================================= */
 
-function renderCreateAd() {
+function renderCreateAd(adId = null) {
 
     const currentUser =
         getCurrentUser();
@@ -1410,6 +1571,19 @@ function renderCreateAd() {
         );
         return;
     }
+
+    let editingAd = null;
+
+    if (adId !== null) {
+
+    editingAd =
+        ads.find(
+            ad =>
+                ad.id === adId &&
+                ad.userId === currentUser.id
+        );
+
+}
 
 
     appContent.innerHTML = `
@@ -1618,47 +1792,136 @@ function renderCreateAd() {
 
     const adSubcategory =
     document.getElementById("adSubcategory"); 
-    
 
     adType.addEventListener(
-    "change",
-    () => {
+        "change",
+        () => {
 
-        const categoriesForType =
-            adCategories[adType.value] || {};
-
-
-        adCategory.innerHTML = `
-            <option value="">
-                Selecione uma categoria
-            </option>
-        `;
+            const categoriesForType =
+                adCategories[adType.value] || {};
 
 
-        Object.keys(categoriesForType)
-            .forEach(category => {
-
-                const option =
-                    document.createElement("option");
-
-                option.value = category;
-
-                option.textContent = category;
-
-                adCategory.appendChild(option);
-
-            });
+            adCategory.innerHTML = `
+                <option value="">
+                    Selecione uma categoria
+                </option>
+            `;
 
 
-        adSubcategory.innerHTML = `
-            <option value="">
-                Selecione primeiro uma categoria
-            </option>
-        `;
+            Object.keys(categoriesForType)
+                .forEach(category => {
 
-        adSubcategory.disabled = true;
+                    const option =
+                        document.createElement("option");
+
+                    option.value = category;
+
+                    option.textContent = category;
+
+                    adCategory.appendChild(option);
+
+                });
+
+
+            adSubcategory.innerHTML = `
+                <option value="">
+                    Selecione primeiro uma categoria
+                </option>
+            `;
+
+            adSubcategory.disabled = true;
+
+        }
+    );
+
+
+    /* ---------- PREENCHER DADOS DA EDIÇÃO ---------- */
+
+    if (editingAd) {
+
+        adType.value =
+            editingAd.type;
+
+        adType.dispatchEvent(
+            new Event("change")
+        );
+
+
+        adCategory.value =
+            editingAd.category;
+
+        adCategory.dispatchEvent(
+            new Event("change")
+        );
+
+
+        adSubcategory.value =
+            editingAd.subcategory;
+
+
+        document.getElementById("adTitle").value =
+            editingAd.title;
+
+        document.getElementById("adDescription").value =
+            editingAd.description;
+
+        document.getElementById("adNeighborhood").value =
+            editingAd.neighborhood;
+
+        document.getElementById("adPrice").value =
+            editingAd.price;
+
+        document.getElementById("adWhatsapp").value =
+            editingAd.whatsapp;
 
     }
+
+
+    adCategory.addEventListener(
+        "change",
+        () => {
+
+            const categoriesForType =
+                adCategories[adType.value] || {};
+
+
+            const subcategories =
+                categoriesForType[
+                    adCategory.value
+                ] || [];
+
+
+            adSubcategory.innerHTML = `
+                <option value="">
+                    Selecione uma subcategoria
+                </option>
+            `;
+
+
+            subcategories.forEach(
+                subcategory => {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value =
+                        subcategory;
+
+                    option.textContent =
+                        subcategory;
+
+                    adSubcategory.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            adSubcategory.disabled =
+                subcategories.length === 0;
+
+        }
     );
 
     adCategory.addEventListener(
@@ -1730,13 +1993,17 @@ function renderCreateAd() {
                         }
 
                 const newAd = {
-
                     id:
-                        Math.max(
-                            ...ads.map(
-                                ad => ad.id
-                            )
-                        ) + 1,
+                        editingAd
+                            ? editingAd.id
+                            : Math.max(
+                                ...ads.map(
+                                    ad => ad.id
+                                )
+                            ) + 1,
+
+                    userId:
+                        currentUser.id,
 
                     type:
                         adType.value,
@@ -1778,23 +2045,38 @@ function renderCreateAd() {
                             .trim(),
 
                     image:
-                        imageData
+                        imageData || (editingAd ? editingAd.image : "")
 
                 };
 
-
-                ads.push(newAd);
+                if (editingAd) {
+                    const adIndex =
+                        ads.findIndex(
+                            ad =>
+                                ad.id === editingAd.id
+                        );
+                    if (adIndex !== -1) {
+                        ads[adIndex] =
+                            newAd;
+                    }
+                } else {
+                    ads.push(newAd);
+}
+                /* ---------- SALVA AS ALTERAÇÕES ---------- */
 
                 saveAds();
+
                 alert(
-                    "Anúncio criado com sucesso!"
+                    editingAd
+                         ? "Anúncio atualizado com sucesso!"
+                         : "Anúncio criado com sucesso!"
                 );
+
+                renderAccount();
 
             }
     );
-
 }
-
 
 /* =========================================================
    CATEGORIA
