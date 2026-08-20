@@ -543,6 +543,35 @@ function renderHome() {
                 placeholder="O que você procura?"
                 autocomplete="off">
 
+                <select
+                    id="searchTypeFilter">
+
+                    <option value="">
+                        Todos os tipos
+                    </option>
+
+                    <option value="servicos">
+                        Serviços
+                    </option>
+
+                    <option value="produtos">
+                        Produtos
+                    </option>
+
+                    <option value="comercio">
+                        Comércio Local
+                    </option>
+
+                </select>
+
+                <select id="searchCategoryFilter" disabled>
+
+                    <option value="">
+                        Todas as categorias
+                    </option>
+
+                </select>
+
             <button
                 type="submit"
                 class="search-button"
@@ -722,29 +751,100 @@ function renderHome() {
 
     /* ---------- BUSCA ---------- */
 
-    document
-        .getElementById("searchForm")
-        .addEventListener(
-            "submit",
-            event => {
+document
+    .getElementById("searchForm")
+    .addEventListener(
+        "submit",
+        event => {
 
-                event.preventDefault();
+            event.preventDefault();
 
-                const term =
-                    document
-                        .getElementById("searchInput")
-                        .value
-                        .trim();
+            const term =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .trim();
 
-                if (!term) {
-                    return;
-                }
+            const type =
+                document
+                    .getElementById("searchTypeFilter")
+                    .value;
 
-                searchAds(term);
+            const category =
+                document
+                    .getElementById("searchCategoryFilter")
+                    .value;
 
+            if (!term) {
+                return;
             }
-        );
 
+            searchAds(
+                term,
+                type,
+                category
+            );
+
+        }
+    );
+
+
+/* ---------- FILTRO DE CATEGORIA ---------- */
+
+const searchTypeFilter =
+    document.getElementById(
+        "searchTypeFilter"
+    );
+
+const searchCategoryFilter =
+    document.getElementById(
+        "searchCategoryFilter"
+    );
+
+
+searchTypeFilter.addEventListener(
+    "change",
+    () => {
+
+        const categoriesForType =
+            adCategories[
+                searchTypeFilter.value
+            ] || {};
+
+
+        searchCategoryFilter.innerHTML = `
+            <option value="">
+                Todas as categorias
+            </option>
+        `;
+
+
+        Object.keys(categoriesForType)
+            .forEach(category => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    category;
+
+                option.textContent =
+                    category;
+
+                searchCategoryFilter.appendChild(
+                    option
+                );
+
+            });
+
+
+        searchCategoryFilter.disabled =
+            !searchTypeFilter.value;
+
+    }
+);
 }
 
 /* =========================================================
@@ -2283,6 +2383,7 @@ function renderDetail() {
                     </span>
 
                 </div>
+            
               `
             : "";
 
@@ -2320,49 +2421,42 @@ function renderDetail() {
 
 
             <div class="detail-info-row">
-
                 <span
                     class="detail-info-label">
-
                     Categoria:
-
                 </span>
 
-
-                <span
-                    class="detail-info-value">
-
+                <span class="detail-info-value">
                     ${ad.category}
-
                 </span>
 
             </div>
-
 
             <div class="detail-info-row">
-
-                <span
-                    class="detail-info-label">
-
-                    Bairro:
-
+                <span class="detail-info-label">
+                    Subcategoria:
                 </span>
 
-
-                <span
-                    class="detail-info-value">
-
-                    ${ad.neighborhood}
-
+                <span class="detail-info-value">
+                    ${ad.subcategory}
                 </span>
 
             </div>
 
+            <div class="detail-info-row">
+                <span class="detail-info-label">
+                    Bairro:
+                </span>
+
+                <span class="detail-info-value">
+                    ${ad.neighborhood}
+                </span>
+
+            </div>
 
             ${priceRow}
 
         </div>
-
 
         <button
             class="whatsapp-button"
@@ -2398,9 +2492,18 @@ function renderDetail() {
    BUSCA
    ========================================================= */
 
-function searchAds(term) {
+/* =========================================================
+   BUSCA
+   ========================================================= */
 
-    const normalizedTerm = normalizeText(term).trim();
+function searchAds(
+    term,
+    type = "",
+    category = ""
+) {
+
+    const normalizedTerm =
+        normalizeText(term).trim();
 
     if (!normalizedTerm) {
         return;
@@ -2428,11 +2531,31 @@ function searchAds(term) {
             const normalizedText =
                 normalizeText(searchableText);
 
-            return searchTerms.every(searchTerm =>
-                normalizedText.includes(searchTerm)
+
+            const matchesTerm =
+                searchTerms.every(searchTerm =>
+                    normalizedText.includes(searchTerm)
+                );
+
+
+            const matchesType =
+                !type ||
+                ad.type === type;
+
+
+            const matchesCategory =
+                !category ||
+                ad.category === category;
+
+
+            return (
+                matchesTerm &&
+                matchesType &&
+                matchesCategory
             );
 
         });
+
 
     renderSearchResults(
         term,

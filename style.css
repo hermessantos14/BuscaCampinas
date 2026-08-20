@@ -243,32 +243,51 @@ body {
 /* ---------- HOME ---------- */
 
 .home-logo {
-    width: 190px;
+    width: 175px;
     height: auto;
     display: block;
-    margin: 4px auto 26px;
+    margin: 0 auto 20px;
 }
 
 
+/* ---------- BUSCA E FILTROS ---------- */
 
 .search-box {
-    display: flex;
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr) 58px;
+    grid-template-rows: 56px 48px 48px;
+
     width: 100%;
-    height: 56px;
+
     border: 1px solid #e6e6e6;
     border-radius: 16px;
+
     background: #ffffff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.06);
+
     overflow: hidden;
-    margin-bottom: 22px;
+
+    margin-bottom: 18px;
 }
 
+
+/* ---------- CAMPO DE BUSCA ---------- */
+
 .search-box input {
-    flex: 1;
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 100%;
     min-width: 0;
+
     border: none;
     outline: none;
+
     padding: 0 16px;
+
     font-size: 15px;
     color: var(--text);
 }
@@ -277,11 +296,22 @@ body {
     color: #999;
 }
 
+
+/* ---------- BOTÃO PESQUISAR ---------- */
+
 .search-button {
+    grid-column: 2;
+    grid-row: 1;
+
     width: 58px;
+    height: 56px;
+
     border: none;
+
     background: var(--red);
+
     cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -294,70 +324,160 @@ body {
 .search-button svg {
     width: 22px;
     height: 22px;
+
     fill: none;
     stroke: #ffffff;
+
     stroke-width: 2;
     stroke-linecap: round;
 }
+
+
+/* ---------- TIPO ---------- */
+
+.search-box #searchTypeFilter {
+    grid-column: 1 / 3;
+    grid-row: 2;
+
+    width: 100%;
+    min-width: 0;
+
+    border: none;
+    border-top: 1px solid #eeeeee;
+
+    outline: none;
+
+    padding: 0 14px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+    color: var(--text);
+
+    cursor: pointer;
+}
+
+
+/* ---------- CATEGORIA ---------- */
+
+.search-box #searchCategoryFilter {
+    grid-column: 1 / 3;
+    grid-row: 3;
+
+    width: 100%;
+    min-width: 0;
+
+    border: none;
+    border-top: 1px solid #eeeeee;
+
+    outline: none;
+
+    padding: 0 14px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+    color: var(--text);
+
+    cursor: pointer;
+}
+
+.search-box #searchCategoryFilter:disabled {
+    color: #999;
+    background: #fafafa;
+    cursor: not-allowed;
+}
+
 
 /* ---------- CATEGORIAS ---------- */
 
 .category-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .category-button {
     width: 100%;
-    min-height: 64px;
+    min-height: 58px;
+
     border: none;
     border-radius: 15px;
-    background: linear-gradient(135deg, #c20b24, #a90016);
+
+    background:
+        linear-gradient(
+            135deg,
+            #c20b24,
+            #a90016
+        );
+
     color: #ffffff;
+
     display: flex;
     align-items: center;
+
     padding: 0 20px;
+
     cursor: pointer;
+
     font-size: 17px;
     font-weight: 700;
-    box-shadow: 0 5px 12px rgba(185, 0, 25, 0.16);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    box-shadow:
+        0 5px 12px rgba(185, 0, 25, 0.16);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .category-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 7px 15px rgba(185, 0, 25, 0.22);
+
+    box-shadow:
+        0 7px 15px rgba(185, 0, 25, 0.22);
 }
 
 .category-icon {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
+
     margin-right: 15px;
+
     fill: none;
     stroke: #ffffff;
+
     stroke-width: 1.8;
+
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+
 
 /* ---------- LINKS DA HOME ---------- */
 
 .home-account-links {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
-    margin-top: 120px;
+
+    margin-top: 28px;
+
     padding: 0 4px;
 }
 
 .home-link {
     border: none;
     background: transparent;
+
     color: var(--red);
+
     font-size: 14px;
     font-weight: 700;
+
     cursor: pointer;
+
     padding: 8px 0;
 }
 
@@ -587,7 +707,8 @@ body {
     }
 
     .home-logo {
-        width: 175px;
+        width: 155px;
+        margin-bottom: 18px;
     }
 }
 
