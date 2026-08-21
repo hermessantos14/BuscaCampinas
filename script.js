@@ -646,10 +646,13 @@ function renderHome() {
                 class="home-link primary"
                 id="announceLink">
 
-                Anuncie Grátis
+                                ${
+                    getCurrentUser()
+                        ? "Minha Conta"
+                        : "Anuncie Grátis"
+                }
 
             </button>
-
 
             <button
                 type="button"
@@ -706,21 +709,17 @@ function renderHome() {
                 const currentUser =
                     getCurrentUser();
 
-
                 if (currentUser) {
 
                     navigateTo("account");
 
                     return;
-
                 }
-
 
             navigateTo("register");
 
         }
     );
-
 
     /* ---------- LOGIN ---------- */
 
@@ -862,7 +861,6 @@ function getUsers() {
 
 }
 
-
 function saveUsers(users) {
 
     localStorage.setItem(
@@ -872,7 +870,6 @@ function saveUsers(users) {
 
 }
 
-
 function setCurrentUser(user) {
 
     localStorage.setItem(
@@ -881,7 +878,6 @@ function setCurrentUser(user) {
     );
 
 }
-
 
 function getCurrentUser() {
 
@@ -1025,7 +1021,6 @@ function renderRegister() {
         </div>
 
     `;
-
 
     document
     .getElementById("registerForm")
@@ -1654,6 +1649,25 @@ function deleteUserAd(adId) {
     renderAccount();
 }
 
+function formatWhatsApp(value) {
+
+    let numbers =
+        value.replace(/\D/g, "");
+
+    numbers =
+        numbers.substring(0, 11);
+
+    if (numbers.length <= 2) {
+        return `(${numbers}`;
+    }
+
+    if (numbers.length <= 7) {
+        return `(${numbers.substring(0, 2)}) ${numbers.substring(2)}`;
+    }
+
+    return `(${numbers.substring(0, 2)}) ${numbers.substring(2, 7)}-${numbers.substring(7)}`;
+}
+
 /* =========================================================
    CADASTRO DE ANÚNCIO
    ========================================================= */
@@ -1972,7 +1986,9 @@ function renderCreateAd(adId = null) {
             editingAd.price;
 
         document.getElementById("adWhatsapp").value =
-            editingAd.whatsapp;
+            formatWhatsApp(
+            editingAd.whatsapp
+            );
 
     }
 
@@ -2071,6 +2087,27 @@ function renderCreateAd(adId = null) {
     }
     );
 
+    const adWhatsapp =
+        document.getElementById("adWhatsapp");
+
+    adWhatsapp.addEventListener(
+        "input",
+        () => {
+
+            const cursorPosition =
+                adWhatsapp.selectionStart;
+
+            const oldValue =
+                adWhatsapp.value;
+
+            adWhatsapp.value =
+                formatWhatsApp(
+                    adWhatsapp.value
+                );
+
+        }
+    );
+
     document
         .getElementById("createAdForm")
         .addEventListener(
@@ -2142,7 +2179,7 @@ function renderCreateAd(adId = null) {
                         document
                             .getElementById("adWhatsapp")
                             .value
-                            .trim(),
+                            .replace(/\D/g, ""),
 
                     image:
                         imageData || (editingAd ? editingAd.image : "")
